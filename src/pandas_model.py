@@ -54,3 +54,8 @@ lines = df[
 ].plot.line()
 # plt.show()
 lines.figure.savefig("DifferenceInMinutes.pdf")
+
+# estimated arrival time
+estimated_arriva_time = df.iloc[0]["TempereScheduledTime"] + pd.to_timedelta(mean, unit="m")
+result = f'Tempere Estimated Arrival Time: {estimated_arriva_time.strftime("%H:%M:%S")}'
+print(result)
