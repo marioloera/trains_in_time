@@ -1,0 +1,22 @@
+{
+  "data": {
+    "trainsByDepartureDate": [
+      {
+        "trainNumber": 45,
+        "departureDate": "2022-03-16",
+        "trainType": {
+          "name": "IC"
+        },
+        "timeTableRows": [
+          {
+            "actualTime": "2022-03-16T10:55:13Z",
+            "differenceInMinutes": 2,
+            "station": {
+              "shortCode": "TPE"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
