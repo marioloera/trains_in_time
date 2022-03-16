@@ -10,3 +10,9 @@
     - use request python with the query to get data from different dates
     - build pipeline in beam,
     - stream data from topic, the beam pipeline can be reused
+
+
+## tried with:
+´´´
+bash src_graph/bash/get_data.sh
+´´´
