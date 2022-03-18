@@ -1,0 +1,22 @@
+[
+  {
+    "departureDate": "2022-02-17",
+    "trainNumber": 45,
+    "timeTableRows": [
+      {
+        "scheduledTime": "2022-02-17T09:03:00Z",
+        "differenceInMinutes": 0,
+        "station": {
+          "shortCode": "HKI"
+        }
+      },
+      {
+        "scheduledTime": "2022-02-17T10:53:00Z",
+        "differenceInMinutes": 2,
+        "station": {
+          "shortCode": "TPE"
+        }
+      }
+    ]
+  }
+]
