@@ -1,0 +1,35 @@
+{
+  trainsByDepartureDate(
+    departureDate:"2022-03-16",
+    where:{and:[
+      	{trainNumber:{equals:45}},
+        {timeTableRows:{contains:{station:{shortCode:{equals:"HKI"}}}}},
+        {timeTableRows:{contains:{station:{shortCode:{equals:"TPE"}}}}},
+    	]
+  	}
+    ) {
+    departureDate,
+    trainNumber,
+    timeTableRows,
+    (
+      where:{or:[
+          {and:[
+            {type:{equals:"DEPARTURE"}},
+            {trainStopping:{equals:true}},
+            {station:{shortCode:{equals:"HKI"}}}
+          ]}
+          {and:[
+            {type:{equals:"ARRIVAL"}},
+            {trainStopping:{equals:true}},
+            {station:{shortCode:{equals:"TPE"}}}
+          ]}
+         ]
+    	}
+  	)
+    {
+      scheduledTime,
+      differenceInMinutes,
+      station{shortCode}
+    }
+  }
+}
