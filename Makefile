@@ -2,7 +2,7 @@ lint:
 	pre-commit run --all-files
 
 test:
-	coverage run -m pytest
+	coverage run -m pytest -v
 
 coverage: test
 	coverage report -m
