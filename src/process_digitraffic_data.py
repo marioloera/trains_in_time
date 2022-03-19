@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import statistics
+from datetime import datetime
 from pathlib import Path
 
 # https://www-digitraffic-fi.translate.goog/rautatieliikenne/?_x_tr_sl=fi&_x_tr_tl=en&_x_tr_hl=fi#junien-tiedot-trains
@@ -18,7 +19,7 @@ def main():
         default="2022-03-18",
     )
     parser.add_argument(
-        "--days_to_fetch",
+        "--max_days_to_fetch",
         help="days to fetch date retrospective from end_date",
         default=30,
     )
@@ -30,13 +31,14 @@ def main():
     args = parser.parse_args()
     logging.info(args)
     data = fetch_data_from_files(args.datafile_path)
-    process_trains_by_departure_date(data, int(args.days_to_fetch))
+    end_date = datetime.strptime(args.end_date_str, "%Y-%m-%d").date()
+    process_trains_by_departure_date(data, end_date, int(args.max_days_to_fetch))
     logging.info("process completed!")
 
 
 class Train:
     def __init__(self, data) -> None:
-        self.departure_date = data["departureDate"]
+        self.departure_date = datetime.strptime(data["departureDate"], "%Y-%m-%d").date()
         self.no = data["trainNumber"]
         self._process_timetables(data["timeTableRows"])
 
@@ -73,15 +75,18 @@ class Timetable:
         self.scheduled_time = timetable.get("scheduledTime")
 
 
-def process_trains_by_departure_date(data, days_to_fetch):
+def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
+
     delays_min = []
     for date in data:
-        # check date range
         for record in date:
             train = Train(record)
-            if train.valid:
-                logging.info(train)
-                delays_min.append(train.arrival.difference_in_minutes)
+            if not train.valid:
+                continue
+            if not 0 <= (end_date - train.departure_date).days <= max_days_to_fetch:
+                continue
+            logging.info(train)
+            delays_min.append(train.arrival.difference_in_minutes)
 
     avg_delay = statistics.mean(delays_min)
     logging.info(f"avg_delay: {avg_delay}")
