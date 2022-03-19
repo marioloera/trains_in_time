@@ -4,6 +4,7 @@
     "trainNumber": 45,
     "timeTableRows": [
       {
+        "type": "DEPARTURE",
         "scheduledTime": "2022-02-21T09:03:00Z",
         "differenceInMinutes": 1,
         "station": {
@@ -11,6 +12,7 @@
         }
       },
       {
+        "type": "ARRIVAL",
         "scheduledTime": "2022-02-21T10:53:00Z",
         "differenceInMinutes": 6,
         "station": {
