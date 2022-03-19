@@ -13,7 +13,7 @@ test-local:
 coverage:
 	coverage run -m pytest -v
 	coverage report -m
-	coverage report -m > coverage_report.log
+	coverage report -m > coverage_report.txt
 	coverage html
 	open htmlcov/index.html
 
