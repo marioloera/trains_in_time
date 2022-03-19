@@ -2,6 +2,8 @@ name: Python Lint and Test
 
 on:
   push:
+    branches-ignore:
+      - 'master'  # Should have been taken care of in the feature branches before merging
 
 jobs:
   build:
