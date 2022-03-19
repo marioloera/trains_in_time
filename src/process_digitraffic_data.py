@@ -33,9 +33,21 @@ def main():
     logging.info("process completed!")
 
 
+class Train:
+    def __init__(self, data) -> None:
+        self.departure_date = data["departureDate"]
+        self.train_number = data["trainNumber"]
+        self.process_timetables(data["timeTableRows"])
+
+    def process_timetables(self, timetables):
+        pass
+
+
 def process_trains_by_departure_date(data, days_to_fetch):
-    for record in data:
-        print(record[0]["departureDate"])
+    for date in data:
+        for record in date:
+            t = Train(record)
+            print(t.departure_date, t.train_number)
 
 
 def fetch_data_from_files(datafile_path):
