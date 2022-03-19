@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import statistics
 from pathlib import Path
 
 # https://www-digitraffic-fi.translate.goog/rautatieliikenne/?_x_tr_sl=fi&_x_tr_tl=en&_x_tr_hl=fi#junien-tiedot-trains
@@ -56,6 +57,9 @@ class Train:
             self.daparture = timetable1
             self.arrival = timetable0
 
+    def __str__(self):
+        pass
+
 
 class Timetable:
     def __init__(self, timetable):
@@ -66,17 +70,17 @@ class Timetable:
 
 
 def process_trains_by_departure_date(data, days_to_fetch):
+    delays_min = []
     for date in data:
+        # check date range
         for record in date:
-            t = Train(record)
-            if t.valid:
-                print(
-                    t.departure_date,
-                    t.train_number,
-                    t.daparture.station_code,
-                    "->",
-                    t.arrival.station_code,
-                )
+            train = Train(record)
+            if train.valid:
+                # print(train)
+                delays_min.append(train.arrival.difference_in_minutes)
+
+    avg_delay = statistics.mean(delays_min)
+    logging.info(f"avg_delay: {avg_delay}")
 
 
 def fetch_data_from_files(datafile_path):
