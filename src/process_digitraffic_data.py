@@ -37,17 +37,46 @@ class Train:
     def __init__(self, data) -> None:
         self.departure_date = data["departureDate"]
         self.train_number = data["trainNumber"]
-        self.process_timetables(data["timeTableRows"])
+        self._process_timetables(data["timeTableRows"])
 
-    def process_timetables(self, timetables):
-        pass
+    def _process_timetables(self, timetables):
+        self.valid = False
+        if len(timetables) != 2:
+            return
+
+        timetable0 = Timetable(timetables[0])
+        timetable1 = Timetable(timetables[1])
+
+        if timetable0.type == "DEPARTURE" and timetable1.type == "ARRIVAL":
+            self.valid = True
+            self.daparture = timetable0
+            self.arrival = timetable1
+        elif timetable1.type == "DEPARTURE" and timetable0.type == "ARRIVAL":
+            self.valid = True
+            self.daparture = timetable1
+            self.arrival = timetable0
+
+
+class Timetable:
+    def __init__(self, timetable):
+        self.type = timetable.get("type")
+        self.station_code = timetable.get("station", {}).get("shortCode")
+        self.difference_in_minutes = timetable.get("differenceInMinutes")
+        self.scheduled_time = timetable.get("scheduledTime")
 
 
 def process_trains_by_departure_date(data, days_to_fetch):
     for date in data:
         for record in date:
             t = Train(record)
-            print(t.departure_date, t.train_number)
+            if t.valid:
+                print(
+                    t.departure_date,
+                    t.train_number,
+                    t.daparture.station_code,
+                    "->",
+                    t.arrival.station_code,
+                )
 
 
 def fetch_data_from_files(datafile_path):
