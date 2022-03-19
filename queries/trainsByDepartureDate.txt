@@ -27,6 +27,7 @@
     	}
   	)
     {
+      type,
       scheduledTime,
       differenceInMinutes,
       station{shortCode}
