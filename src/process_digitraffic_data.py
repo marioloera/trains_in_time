@@ -2,7 +2,7 @@ import argparse
 import json
 import logging
 import statistics
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 from modules.train import Train
@@ -60,8 +60,10 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
     logging.info(f"avg_delay_min: {avg_delay_min}")
 
     # estimated arrival time
-    estimated_arrival_time = train.arrival.scheduled_time + timedelta(minutes=avg_delay_min)
-    result = f'Tampere Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+    estimated_arrival_time = train.estimate_arrival_time(avg_delay_min)
+    result = (
+        f'{train.arrival.station_code} Station Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+    )
     logging.info(result)
 
 

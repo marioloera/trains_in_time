@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from modules.timetable import Timetable
 
@@ -25,6 +25,9 @@ class Train:
             self.valid = True
             self.daparture = timetable1
             self.arrival = timetable0
+
+    def estimate_arrival_time(self, diff_min):
+        return self.arrival.scheduled_time + timedelta(minutes=diff_min)
 
     def __str__(self):
         msg = (
