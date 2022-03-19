@@ -2,9 +2,16 @@ lint:
 	pre-commit run --all-files
 
 test:
-	coverage run -m pytest -v
+	pytest -v
 
-coverage: test
+test-server:
+	pytest src/server_tests -v
+
+test-local:
+	pytest src/tests -v
+
+coverage:
+	coverage run -m pytest -v
 	coverage report -m
 	coverage report -m > coverage_report.log
 	coverage html
