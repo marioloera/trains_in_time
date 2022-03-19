@@ -20,7 +20,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install
+        python -m pip install --upgrade pip
+        make install-dev
 
     - name: Run pre-commit hooks
       run: |
