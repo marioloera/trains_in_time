@@ -6,6 +6,9 @@ test:
 
 coverage: test
 	coverage report -m
+	coverage report -m > coverage_report.log
+	coverage html
+	open htmlcov/index.html
 
 install:
 	pip install -r requirements.txt
