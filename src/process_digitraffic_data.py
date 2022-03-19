@@ -2,7 +2,7 @@ import argparse
 import json
 import logging
 import statistics
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 # https://www-digitraffic-fi.translate.goog/rautatieliikenne/?_x_tr_sl=fi&_x_tr_tl=en&_x_tr_hl=fi#junien-tiedot-trains
@@ -76,7 +76,6 @@ class Timetable:
 
 
 def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
-
     delays_min = []
     for date in data:
         for record in date:
@@ -88,8 +87,14 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
             logging.info(train)
             delays_min.append(train.arrival.difference_in_minutes)
 
-    avg_delay = statistics.mean(delays_min)
-    logging.info(f"avg_delay: {avg_delay}")
+    avg_delay_min = statistics.mean(delays_min)
+    logging.info(f"avg_delay_min: {avg_delay_min}")
+
+    # estimated arrival time
+    scheduled_datetime = datetime.strptime(train.arrival.scheduled_time, "%Y-%m-%dT%H:%M:%SZ")
+    estimated_arrival_time = scheduled_datetime + timedelta(minutes=avg_delay_min)
+    result = f'Tampere Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+    logging.info(result)
 
 
 def fetch_data_from_files(datafile_path):
