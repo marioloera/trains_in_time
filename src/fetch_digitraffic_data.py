@@ -44,6 +44,7 @@ def fetch_data(end_date_str, days_to_fetch, datafile_path):
     for i in range(days_to_fetch):
         target_date = END_DATE - timedelta(days=i)
         logging.info(f"making request for date: {target_date}")
+        # TODO the next three lines of code can be wraped in the class
         request_data = REQUEST_DATA.replace(HARDCORE_DATE, str(target_date))
         response = DigiTraffic.make_request(request_data)
         results = process_response(response)
@@ -58,6 +59,7 @@ def save_to_file(data, filename):
 
 
 def process_response(response):
+    # TODO: MOVE TO DigiTraffic
     try:
         response_dict = response.json()
         if response.status_code != 200:
