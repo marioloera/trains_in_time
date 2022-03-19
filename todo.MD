@@ -1,3 +1,3 @@
 # TODO
- * add test to fetch_digitraffic_data
- * script to process data, using same pd logic
+ * test fetch_digitraffic_data
+ * test process_digitraffic_data
