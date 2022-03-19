@@ -2,8 +2,10 @@ import argparse
 import json
 import logging
 import statistics
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
+
+from modules.train import Train
 
 # https://www-digitraffic-fi.translate.goog/rautatieliikenne/?_x_tr_sl=fi&_x_tr_tl=en&_x_tr_hl=fi#junien-tiedot-trains
 # https://www.digitraffic.fi/ohjeita/#pakkaus
@@ -36,45 +38,6 @@ def main():
     logging.info("process completed!")
 
 
-class Train:
-    def __init__(self, data) -> None:
-        self.departure_date = datetime.strptime(data["departureDate"], "%Y-%m-%d").date()
-        self.no = data["trainNumber"]
-        self._process_timetables(data["timeTableRows"])
-
-    def _process_timetables(self, timetables):
-        self.valid = False
-        if len(timetables) != 2:
-            return
-
-        timetable0 = Timetable(timetables[0])
-        timetable1 = Timetable(timetables[1])
-
-        if timetable0.type == "DEPARTURE" and timetable1.type == "ARRIVAL":
-            self.valid = True
-            self.daparture = timetable0
-            self.arrival = timetable1
-        elif timetable1.type == "DEPARTURE" and timetable0.type == "ARRIVAL":
-            self.valid = True
-            self.daparture = timetable1
-            self.arrival = timetable0
-
-    def __str__(self):
-        msg = (
-            f"Train no.{self.no} {self.daparture.station_code} -> {self.arrival.station_code} "
-            f"at {self.daparture.scheduled_time}"
-        )
-        return msg
-
-
-class Timetable:
-    def __init__(self, timetable):
-        self.type = timetable.get("type")
-        self.station_code = timetable.get("station", {}).get("shortCode")
-        self.difference_in_minutes = timetable.get("differenceInMinutes")
-        self.scheduled_time = timetable.get("scheduledTime")
-
-
 def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
     delays_min = []
     no_data = True
@@ -97,9 +60,10 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
     logging.info(f"avg_delay_min: {avg_delay_min}")
 
     # estimated arrival time
-    scheduled_datetime = datetime.strptime(train.arrival.scheduled_time, "%Y-%m-%dT%H:%M:%SZ")
-    estimated_arrival_time = scheduled_datetime + timedelta(minutes=avg_delay_min)
-    result = f'Tampere Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+    estimated_arrival_time = train.estimate_arrival_time(avg_delay_min)
+    result = (
+        f'{train.arrival.station_code} Station Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+    )
     logging.info(result)
 
 
