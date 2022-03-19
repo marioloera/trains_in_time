@@ -35,7 +35,7 @@ queries/trainsByDepartureDate.txt
 python src/fetch_digitraffic_data.py \
     --end_date=2022-03-18 \
     --days_to_fetch=10 \
-    --datafile_path=results
+    --datafile_path=digitraffic_data/trainsByDepartureDates/results
 ```
 
 ## Railway trafic Data
