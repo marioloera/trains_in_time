@@ -5,9 +5,9 @@ from modules.timetable import Timetable
 
 class Train:
     def __init__(self, data) -> None:
-        self.departure_date = datetime.strptime(data["departureDate"], "%Y-%m-%d").date()
-        self.no = data["trainNumber"]
-        self._process_timetables(data["timeTableRows"])
+        self.departure_date = datetime.strptime(data.get("departureDate"), "%Y-%m-%d").date()
+        self.no = data.get("trainNumber")
+        self._process_timetables(data.get("timeTableRows"))
 
     def _process_timetables(self, timetables):
         self.valid = False
