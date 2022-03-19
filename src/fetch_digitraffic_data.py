@@ -4,7 +4,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 
-import requests
+from modules.digitraffic_utils import DigiTraffic
 
 # https://www-digitraffic-fi.translate.goog/rautatieliikenne/?_x_tr_sl=fi&_x_tr_tl=en&_x_tr_hl=fi#junien-tiedot-trains
 # https://www.digitraffic.fi/ohjeita/#pakkaus
@@ -38,24 +38,18 @@ def main():
 def fetch_data(end_date_str, days_to_fetch, datafile_path):
     QUERYFILENAME = "queries/trainsByDepartureDate.txt"
     HARDCORE_DATE = "2022-03-16"
-    REQUEST_DATA = get_request_data_from_file(QUERYFILENAME)
+    REQUEST_DATA = DigiTraffic.get_request_data_from_file(QUERYFILENAME)
     END_DATE = datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
     for i in range(days_to_fetch):
         target_date = END_DATE - timedelta(days=i)
         logging.info(f"making request for date: {target_date}")
+        # TODO the next three lines of code can be wraped in the class
         request_data = REQUEST_DATA.replace(HARDCORE_DATE, str(target_date))
-        response = make_request(request_data)
+        response = DigiTraffic.make_request(request_data)
         results = process_response(response)
         save_to_file(results, f"{datafile_path}_{target_date}.json")
         time.sleep(1)  # to avoid to many reques, Too many requests. Only 60 requests per minute per ip per url
-
-
-def get_request_data_from_file(query_file):
-    with open(query_file, mode="r") as f:
-        query = json.dumps(f.read())
-        body = f'{{"query":{query}}}'
-        return body
 
 
 def save_to_file(data, filename):
@@ -64,16 +58,8 @@ def save_to_file(data, filename):
         f.write("\n")
 
 
-def make_request(data):
-    url = "https://rata.digitraffic.fi/api/v2/graphql/graphql"
-    headers = {
-        "Content-Type": "application/json",
-        "Accept-Encoding": "gzip",
-    }
-    return requests.post(url, data=data, headers=headers)
-
-
 def process_response(response):
+    # TODO: MOVE TO DigiTraffic
     try:
         response_dict = response.json()
         if response.status_code != 200:

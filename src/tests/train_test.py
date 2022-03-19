@@ -38,7 +38,36 @@ class TestTrain:
         assert self.train.arrival.station_code == "TPE"
         assert self.train.daparture.station_code == "HKI"
 
-    def test_process_timetablesd(self):
+    def test_departure_and_arrival(self):
+        data = {
+            "departureDate": "2022-01-25",
+            "timeTableRows": [
+                {
+                    "type": "ARRIVAL",
+                    "scheduledTime": "2022-01-25T09:03:00Z",
+                    "station": {"shortCode": "HKI"},
+                },
+                {
+                    "type": "DEPARTURE",
+                    "scheduledTime": "2022-01-25T10:53:00Z",
+                    "station": {"shortCode": "TPE"},
+                },
+            ],
+        }
+        new_train = Train(data)
+        assert new_train.arrival.station_code == "HKI"
+        assert new_train.daparture.station_code == "TPE"
+
+    def test_process_timetables_empty(self):
         new_train = Train(self.data)
         new_train._process_timetables([])
         assert not new_train.valid
+
+    def test_estimate_arrival_time(self):
+        delay_min = 3
+        estimated_arrival_time = self.train.estimate_arrival_time(delay_min)
+        assert isinstance(estimated_arrival_time, datetime)
+        assert estimated_arrival_time == datetime(2022, 1, 25, 10, 53 + delay_min)
+
+    def test__str__(self):
+        print(self.train)
