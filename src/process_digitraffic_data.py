@@ -37,7 +37,7 @@ def main():
 class Train:
     def __init__(self, data) -> None:
         self.departure_date = data["departureDate"]
-        self.train_number = data["trainNumber"]
+        self.no = data["trainNumber"]
         self._process_timetables(data["timeTableRows"])
 
     def _process_timetables(self, timetables):
@@ -58,7 +58,11 @@ class Train:
             self.arrival = timetable0
 
     def __str__(self):
-        pass
+        msg = (
+            f"Train no.{self.no} {self.daparture.station_code} -> {self.arrival.station_code} "
+            f"at {self.daparture.scheduled_time}"
+        )
+        return msg
 
 
 class Timetable:
@@ -76,7 +80,7 @@ def process_trains_by_departure_date(data, days_to_fetch):
         for record in date:
             train = Train(record)
             if train.valid:
-                # print(train)
+                logging.info(train)
                 delays_min.append(train.arrival.difference_in_minutes)
 
     avg_delay = statistics.mean(delays_min)
