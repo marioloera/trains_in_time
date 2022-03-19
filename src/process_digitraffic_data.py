@@ -77,6 +77,7 @@ class Timetable:
 
 def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
     delays_min = []
+    no_data = True
     for date in data:
         for record in date:
             train = Train(record)
@@ -84,8 +85,13 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch):
                 continue
             if not 0 <= (end_date - train.departure_date).days <= max_days_to_fetch:
                 continue
+            no_data = False
             logging.info(train)
             delays_min.append(train.arrival.difference_in_minutes)
+
+    if no_data:
+        logging.warning("no data was found")
+        return
 
     avg_delay_min = statistics.mean(delays_min)
     logging.info(f"avg_delay_min: {avg_delay_min}")
