@@ -36,17 +36,12 @@ def main():
 
 
 def fetch_data(end_date_str, days_to_fetch, datafile_path):
-    HARDCORE_DATE = "2022-03-16"
-    REQUEST_DATA = DigiTraffic.get_request_data_from_file(DigiTraffic.QUERYFILENAME)
     END_DATE = datetime.strptime(end_date_str, "%Y-%m-%d").date()
-
+    digi_traffic = DigiTraffic()
     for i in range(days_to_fetch):
         target_date = END_DATE - timedelta(days=i)
         logging.info(f"making request for date: {target_date}")
-        # TODO the next three lines of code can be wraped in the class
-        request_data = REQUEST_DATA.replace(HARDCORE_DATE, str(target_date))
-        response = DigiTraffic.make_request(request_data)
-        results = DigiTraffic.process_response(response)
+        results = digi_traffic.get_data_per_date(str(target_date))
         save_to_file(results, f"{datafile_path}_{target_date}.json")
         time.sleep(1)  # to avoid to many reques, Too many requests. Only 60 requests per minute per ip per url
 

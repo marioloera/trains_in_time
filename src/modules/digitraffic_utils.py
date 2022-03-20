@@ -6,9 +6,13 @@ import requests
 
 class DigiTraffic:
     QUERYFILENAME = "queries/trainsByDepartureDate.txt"
+    HARDCORE_DATE = "2022-03-16"
+
+    def __init__(self) -> None:
+        self.REQUEST_DATA = self.get_request_data_from_file(self.QUERYFILENAME)
 
     @staticmethod
-    def get_request_data_from_file(query_file=QUERYFILENAME):
+    def get_request_data_from_file(query_file):
         with open(query_file, mode="r") as f:
             query = json.dumps(f.read())
             body = f'{{"query":{query}}}'
@@ -50,3 +54,8 @@ class DigiTraffic:
             return
 
         return results
+
+    def get_data_per_date(self, target_date):
+        request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
+        response = self.make_request(request_data)
+        return self.process_response(response)
