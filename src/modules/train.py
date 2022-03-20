@@ -11,6 +11,9 @@ class Train:
 
     def _process_timetables(self, timetables):
         self.valid = False
+        if not isinstance(timetables, list):
+            return
+
         if len(timetables) != 2:
             return
 
@@ -31,7 +34,7 @@ class Train:
 
     def __str__(self):
         msg = (
-            f"Train no.{self.no} {self.daparture.station_code} -> {self.arrival.station_code} "
-            f"at {self.daparture.scheduled_time}"
+            f"Train no:{self.no} {self.daparture.station_code}: {self.daparture.scheduled_time} "
+            f"-> {self.arrival.station_code}: {self.arrival.scheduled_time}"
         )
         return msg
