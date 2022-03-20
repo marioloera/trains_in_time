@@ -7,6 +7,7 @@ import requests
 class DigiTraffic:
     QUERYFILENAME = "queries/trainsByDepartureDate.txt"
     HARDCORE_DATE = "2022-03-16"
+    HARDCORE_TRAIN_45 = "{trainNumber:{equals:45}},"
 
     def __init__(self) -> None:
         self.REQUEST_DATA = self.get_request_data_from_file(self.QUERYFILENAME)
@@ -58,4 +59,10 @@ class DigiTraffic:
     def get_data_per_date(self, target_date):
         request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
         response = self.make_request(request_data)
+        return self.process_response(response)
+
+    def get_all_trains_per_date(self, target_date):
+        request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
+        request_data_all_trains = request_data.replace(self.HARDCORE_TRAIN_45, "")
+        response = self.make_request(request_data_all_trains)
         return self.process_response(response)
