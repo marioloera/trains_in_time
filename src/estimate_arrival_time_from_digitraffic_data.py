@@ -68,10 +68,7 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch, target_d
 
     # estimated arrival time
     estimated_arrival_time = train.estimate_arrival_time(target_date, avg_delay_min)
-    result = (
-        f"Train no {train.no}, {train.arrival.station_code} Station, "
-        f"Estimated Arrival Time: {Train.FinnishTime(estimated_arrival_time)}"
-    )
+    result = f"{train}.\nEstimated Arrival Time: {Train.FinnishTime(estimated_arrival_time)}"
     logging.info(result)
 
     earlier_train = find_earlier_train(target_date, train.arrival.scheduled_time)
