@@ -1,9 +1,23 @@
 import json
 
+import pytest
+
 from modules.digitraffic_utils import DigiTraffic
 
 
 class TestFetchDigitrafficData:
+    """
+    The most important method is DigiTraffic.make_request
+    so it is tested with simple query.
+
+    Second most importan method is DigiTraffic.make_request,
+    sinc most of the other test are build on these two.
+
+    currentlyRunningTrains queries, are valid but the
+    DigiTraffic does not handles results from those queries and
+    that is ok
+    """
+
     def test_make_request_basic_status_code(self):
         query = json.dumps("{currentlyRunningTrains{trainNumber}}")
         request_data = f'{{"query":{query}}}'
@@ -51,6 +65,21 @@ class TestFetchDigitrafficData:
         response = DigiTraffic.make_request(request_data)
         results = DigiTraffic.process_response(response)
         assert results == expected_results
+
+    def test_process_response_exception(self):
+        with pytest.raises(Exception):
+            _ = DigiTraffic.process_response("request")
+
+    def test_process_response_status_code(self):
+        request_data = '{"query":{currentlyRunningTrainsFake{trainNumber}}}'
+        response = DigiTraffic.make_request(request_data)
+        assert DigiTraffic.process_response(response) is None
+
+    def test_process_response_no_trainsByDepartureDate(self):
+        query = json.dumps("{currentlyRunningTrains{trainNumber}}")
+        request_data = f'{{"query":{query}}}'
+        response = DigiTraffic.make_request(request_data)
+        assert DigiTraffic.process_response(response) is None
 
     def test_get_data_per_date(self):
         target_date = "2022-01-01"

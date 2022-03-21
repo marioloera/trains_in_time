@@ -40,18 +40,12 @@ class DigiTraffic:
         except Exception as e:
             logging.error(e)
             logging.error(response)
-            return
+            raise
 
-        data = response_dict.get("data")
-        if data is None:
-            logging.warning("no data in response")
-            logging.warning(response_dict)
-            return
-
-        results = data.get("trainsByDepartureDate")
+        results = response_dict.get("data", {}).get("trainsByDepartureDate")
         if results is None:
-            logging.warning("no trainsByDepartureDate in data")
-            logging.warning(data)
+            logging.warning("no data/trainsByDepartureDate in data")
+            logging.warning(response_dict)
             return
 
         return results
