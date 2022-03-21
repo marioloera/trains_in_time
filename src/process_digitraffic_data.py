@@ -89,7 +89,7 @@ def fetch_data_from_files(datafile_path):
 def find_earlier_train(target_date, arrival_time):
     new_time = arrival_time.replace(year=target_date.year, month=target_date.month, day=target_date.day)
     earlier_trains = {}
-    records = DigiTraffic().get_all_trains_per_date(str(target_date))
+    records = DigiTraffic().fetch_all_trains_per_date(str(target_date))
     for record in records:
         train = Train(record)
         if not train.valid:

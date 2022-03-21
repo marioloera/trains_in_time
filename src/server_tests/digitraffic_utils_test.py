@@ -86,8 +86,8 @@ class TestFetchDigitrafficData:
         results = DigiTraffic().fetch_train_data_per_date(target_date)
         assert results[0]["departureDate"] == target_date
 
-    def test_get_all_trains_per_date(self):
+    def test_fetch_all_trains_per_date(self):
         target_date = "2022-02-02"
-        results = DigiTraffic().get_all_trains_per_date(target_date)
+        results = DigiTraffic().fetch_all_trains_per_date(target_date)
         assert results[0]["departureDate"] == target_date
         assert len(results) > 1
