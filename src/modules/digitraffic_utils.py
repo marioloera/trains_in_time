@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 
 import requests
 
@@ -50,9 +51,11 @@ class DigiTraffic:
 
         return results
 
-    def get_data_per_date(self, target_date):
+    def fetch_train_data_per_date(self, target_date, sleep_sec=0):
+        logging.info(f"fetch_train_data_per_date({target_date})")
         request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
         response = self.make_request(request_data)
+        time.sleep(sleep_sec)  # to avoid to many reques, Only 60 requests per minute per ip per url
         return self.process_response(response)
 
     def get_all_trains_per_date(self, target_date):

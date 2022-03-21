@@ -81,9 +81,9 @@ class TestFetchDigitrafficData:
         response = DigiTraffic.make_request(request_data)
         assert DigiTraffic.process_response(response) is None
 
-    def test_get_data_per_date(self):
+    def test_fetch_train_data_per_date(self):
         target_date = "2022-01-01"
-        results = DigiTraffic().get_data_per_date(target_date)
+        results = DigiTraffic().fetch_train_data_per_date(target_date)
         assert results[0]["departureDate"] == target_date
 
     def test_get_all_trains_per_date(self):
