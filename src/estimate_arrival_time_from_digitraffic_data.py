@@ -67,9 +67,10 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch, target_d
     logging.info(f"avg_delay_min: {avg_delay_min}")
 
     # estimated arrival time
-    estimated_arrival_time = train.estimate_arrival_time(avg_delay_min)
+    estimated_arrival_time = train.estimate_arrival_time(target_date, avg_delay_min)
     result = (
-        f'{train.arrival.station_code} Station Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+        f"Train no {train.no}, {train.arrival.station_code} Station, "
+        f"Estimated Arrival Time: {Train.FinnishTime(estimated_arrival_time)}"
     )
     logging.info(result)
 
@@ -89,7 +90,7 @@ def fetch_data_from_files(datafile_path):
 def find_earlier_train(target_date, arrival_time):
     new_time = arrival_time.replace(year=target_date.year, month=target_date.month, day=target_date.day)
     earlier_trains = {}
-    records = DigiTraffic().get_all_trains_per_date(str(target_date))
+    records = DigiTraffic().fetch_all_trains_per_date(str(target_date))
     for record in records:
         train = Train(record)
         if not train.valid:

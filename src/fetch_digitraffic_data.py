@@ -1,7 +1,6 @@
 import argparse
 import json
 import logging
-import time
 from datetime import datetime, timedelta
 
 from modules.digitraffic_utils import DigiTraffic
@@ -40,10 +39,8 @@ def fetch_data(end_date_str, days_to_fetch, datafile_path):
     digi_traffic = DigiTraffic()
     for i in range(days_to_fetch):
         target_date = END_DATE - timedelta(days=i)
-        logging.info(f"making request for date: {target_date}")
-        results = digi_traffic.get_data_per_date(str(target_date))
+        results = digi_traffic.fetch_train_data_per_date(str(target_date), sleep_sec=1)
         save_to_file(results, f"{datafile_path}_{target_date}.json")
-        time.sleep(1)  # to avoid to many reques, Too many requests. Only 60 requests per minute per ip per url
 
 
 def save_to_file(data, filename):

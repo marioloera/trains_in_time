@@ -1,5 +1,6 @@
 import json
 import logging
+import time
 
 import requests
 
@@ -40,29 +41,28 @@ class DigiTraffic:
         except Exception as e:
             logging.error(e)
             logging.error(response)
-            return
+            raise
 
-        data = response_dict.get("data")
-        if data is None:
-            logging.warning("no data in response")
-            logging.warning(response_dict)
-            return
-
-        results = data.get("trainsByDepartureDate")
+        results = response_dict.get("data", {}).get("trainsByDepartureDate")
         if results is None:
-            logging.warning("no trainsByDepartureDate in data")
-            logging.warning(data)
+            logging.warning("no data/trainsByDepartureDate in data")
+            logging.warning(response_dict)
             return
 
         return results
 
-    def get_data_per_date(self, target_date):
-        request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
+    def _fetch_data(self, request_data, sleep_sec):
         response = self.make_request(request_data)
+        time.sleep(sleep_sec)  # to avoid to many reques, Only 60 requests per minute per ip per url
         return self.process_response(response)
 
-    def get_all_trains_per_date(self, target_date):
+    def fetch_train_data_per_date(self, target_date, sleep_sec=0):
+        logging.info(f"fetch_train_data_per_date({target_date})")
+        request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
+        return self._fetch_data(request_data, sleep_sec)
+
+    def fetch_all_trains_per_date(self, target_date, sleep_sec=0):
+        logging.info(f"fetch_all_trains_per_date({target_date})")
         request_data = self.REQUEST_DATA.replace(self.HARDCORE_DATE, str(target_date))
         request_data_all_trains = request_data.replace(self.HARDCORE_TRAIN_45, "")
-        response = self.make_request(request_data_all_trains)
-        return self.process_response(response)
+        return self._fetch_data(request_data_all_trains, sleep_sec)

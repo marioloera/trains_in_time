@@ -1,10 +1,10 @@
 Name                                         Stmts   Miss  Cover   Missing
 --------------------------------------------------------------------------
-src/modules/digitraffic_utils.py                52     13    75%   36-43, 47-49, 53-55
+src/modules/digitraffic_utils.py                52      0   100%
 src/modules/timetable.py                         7      0   100%
-src/modules/train.py                            28      1    96%   15
-src/server_tests/digitraffic_utils_test.py      37      0   100%
+src/modules/train.py                            36      0   100%
+src/server_tests/digitraffic_utils_test.py      50      0   100%
 src/tests/timetable_test.py                     14      0   100%
-src/tests/train_test.py                         31      0   100%
+src/tests/train_test.py                         32      0   100%
 --------------------------------------------------------------------------
-TOTAL                                          169     14    92%
+TOTAL                                          191      0   100%
