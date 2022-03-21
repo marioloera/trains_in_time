@@ -1,13 +1,23 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from modules.timetable import Timetable
 
 
 class Train:
+    TZ_EET = timezone(timedelta(hours=+2), "EET")
+
     def __init__(self, data) -> None:
         self.departure_date = datetime.strptime(data.get("departureDate"), "%Y-%m-%d").date()
         self.no = data.get("trainNumber")
         self._process_timetables(data.get("timeTableRows"))
+
+    @staticmethod
+    def utc_to_timezone(utc_dt, target_timezone):
+        return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=target_timezone)
+
+    @staticmethod
+    def FinnishTime(utc_dt):
+        return Train.utc_to_timezone(utc_dt, Train.TZ_EET)
 
     def _process_timetables(self, timetables):
         self.valid = False
@@ -37,7 +47,7 @@ class Train:
 
     def __str__(self):
         msg = (
-            f"Train no:{self.no} {self.daparture.station_code}: {self.daparture.scheduled_time} "
-            f"-> {self.arrival.station_code}: {self.arrival.scheduled_time}"
+            f"Train no {self.no} {self.daparture.station_code}: {Train.FinnishTime(self.daparture.scheduled_time)} "
+            f"-> {self.arrival.station_code}: {Train.FinnishTime(self.arrival.scheduled_time)}"
         )
         return msg
