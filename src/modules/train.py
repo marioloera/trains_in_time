@@ -29,8 +29,11 @@ class Train:
             self.daparture = timetable1
             self.arrival = timetable0
 
-    def estimate_arrival_time(self, diff_min):
-        return self.arrival.scheduled_time + timedelta(minutes=diff_min)
+    def estimate_arrival_time(self, target_date, diff_min):
+        new_time = self.arrival.scheduled_time.replace(
+            year=target_date.year, month=target_date.month, day=target_date.day
+        )
+        return new_time + timedelta(minutes=diff_min)
 
     def __str__(self):
         msg = (

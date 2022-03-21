@@ -67,7 +67,7 @@ class TestTrain:
 
     def test_estimate_arrival_time(self):
         delay_min = 3
-        estimated_arrival_time = self.train.estimate_arrival_time(delay_min)
+        estimated_arrival_time = self.train.estimate_arrival_time(datetime(2022, 1, 25), delay_min)
         assert isinstance(estimated_arrival_time, datetime)
         assert estimated_arrival_time == datetime(2022, 1, 25, 10, 53 + delay_min)
 

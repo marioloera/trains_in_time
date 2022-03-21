@@ -67,9 +67,9 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch, target_d
     logging.info(f"avg_delay_min: {avg_delay_min}")
 
     # estimated arrival time
-    estimated_arrival_time = train.estimate_arrival_time(avg_delay_min)
+    estimated_arrival_time = train.estimate_arrival_time(target_date, avg_delay_min, 2)
     result = (
-        f'{train.arrival.station_code} Station Estimated Arrival Time: {estimated_arrival_time.strftime("%H:%M:%S")}'
+        f"Train no {train.no}, {train.arrival.station_code} Station Estimated Arrival Time: {estimated_arrival_time}"
     )
     logging.info(result)
 
