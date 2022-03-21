@@ -59,9 +59,11 @@ class TestTrain:
         assert new_train.daparture.station_code == "TPE"
 
     def test_process_timetables_empty(self):
-        new_train = Train(self.data)
-        new_train._process_timetables([])
-        assert not new_train.valid
+        self.train._process_timetables([])
+        assert not self.train.valid
+
+    def test_process_timetables_not_list(self):
+        assert self.train._process_timetables("") is None
 
     def test_estimate_arrival_time(self):
         delay_min = 3
