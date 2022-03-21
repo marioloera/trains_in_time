@@ -30,10 +30,13 @@ digitraffic_data/trainsByDepartureDates/
 
 ## Estimate Arrival time using fetched Data
 A script that process the json files wiht Railway data
-and estimates the arrival time
+and estimates the arrival time at target_date
+
+
 
 ```
 python src/process_digitraffic_data.py \
+    --target_date=2022-03-23 \
     --end_date=2022-03-18 \
     --max_days_to_fetch=10 \
     --datafile_path=digitraffic_data/trainsByDepartureDates/
