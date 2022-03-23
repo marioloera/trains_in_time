@@ -1,5 +1,7 @@
 import pandas as pd
 
+from modules.color_text import ColorText
+
 data_file = "sample_data/train-45-data-2017-01-01_to_2017-07-12.csv"
 df = pd.read_csv(data_file)
 
@@ -58,4 +60,4 @@ lines.figure.savefig("DifferenceInMinutes.pdf")
 # estimated arrival time
 estimated_arriva_time = df.iloc[0]["TempereScheduledTime"] + pd.to_timedelta(mean, unit="m")
 result = f'Tempere Estimated Arrival Time: {estimated_arriva_time.strftime("%H:%M:%S")}'
-print(result)
+print(ColorText.to_color(result, "YELLOW"))

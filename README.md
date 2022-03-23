@@ -42,11 +42,14 @@ python src/estimate_arrival_time_from_digitraffic_data.py \
 ```
 output example
 ```
-INFO:root:avg_delay_min: 9.258064516129032
-INFO:root:Train no 45 HKI: 2022-02-26 11:03:00+02:00 -> TPE: 2022-02-26 12:53:00+02:00.
-Estimated Arrival Time: 2022-03-23 13:02:15.483871+02:00
+INFO:root:
+ Train no 45 HKI: 2022-02-26 11:03:00+02:00 -> TPE: 2022-02-26 12:53:00+02:00
+ Average delay: 9.258064516129032 minutes
+ Estimated Arrival Time: 2022-03-23 13:02:15.483871+02:00
 INFO:root:fetch_all_trains_per_date(2022-03-23)
-INFO:root:Earlier train: Train no 143 HKI: 2022-03-23 10:24:00+02:00 -> TPE: 2022-03-23 11:58:00+02:00
+INFO:root:
+ Earlier train:
+ Train no 143 HKI: 2022-03-23 10:24:00+02:00 -> TPE: 2022-03-23 11:58:00+02:00
 ```
 
 ## Estimate Arrival time using sample data

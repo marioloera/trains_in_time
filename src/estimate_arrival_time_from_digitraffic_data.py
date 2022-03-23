@@ -5,6 +5,7 @@ import statistics
 from datetime import datetime
 from pathlib import Path
 
+from modules.color_text import ColorText
 from modules.digitraffic_utils import DigiTraffic
 from modules.train import Train
 
@@ -64,15 +65,19 @@ def process_trains_by_departure_date(data, end_date, max_days_to_fetch, target_d
         return
 
     avg_delay_min = statistics.mean(delays_min)
-    logging.info(f"avg_delay_min: {avg_delay_min}")
 
     # estimated arrival time
     estimated_arrival_time = train.estimate_arrival_time(target_date, avg_delay_min)
-    result = f"{train}.\nEstimated Arrival Time: {Train.FinnishTime(estimated_arrival_time)}"
-    logging.info(result)
+    msg = (
+        f"\n {train}"
+        f"\n Average delay: {avg_delay_min} minutes"
+        f"\n Estimated Arrival Time: {Train.FinnishTime(estimated_arrival_time)}"
+    )
+    logging.info(ColorText.to_color(msg, "YELLOW"))
 
     earlier_train = find_earlier_train(target_date, train.arrival.scheduled_time)
-    logging.info(f"Earlier train: {earlier_train}")
+    msg = f"\n Earlier train:\n {earlier_train}"
+    logging.info(ColorText.to_color(msg, "GREEN"))
 
 
 def fetch_data_from_files(datafile_path):
